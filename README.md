@@ -12,7 +12,7 @@ respond to a user's tap to display the answer to the question
 ### App Walk-though
 
 
-<img src="https://recordit.co/cjQDmiwGJj" width=200><br>
+<img src="http://g.recordit.co/cjQDmiwGJj.gif" width=200><br>
 
 
 ## Required
