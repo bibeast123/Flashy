@@ -24,5 +24,13 @@
         android:text="@string/george_washington1"
         android:textSize="40sp"
         android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/myBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        app:srcCompat="@drawable/plus_icon"
+        android:layout_height="40dp"
+        android:layout_width="40dp" />
+
 
 </RelativeLayout>
