@@ -11,7 +11,7 @@ Understand how to pass data around within the app
 ### App Walk-though
 
 
-<img src="http://g.recordit.co/9BpQRM9Cs7.gif" width=200><br>
+<img src="http://g.recordit.co/vrYQMjn1Mc.gif" width=200><br>
 
 
 
