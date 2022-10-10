@@ -11,7 +11,7 @@ class AddCardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_card)
-val question=findViewById<EditText>(R.id.QuestionField);
+        val question=findViewById<EditText>(R.id.QuestionField);
         val answer =findViewById<EditText>(R.id.AnswerField);
 
         findViewById<View>(R.id.myCancelBtn).setOnClickListener {
