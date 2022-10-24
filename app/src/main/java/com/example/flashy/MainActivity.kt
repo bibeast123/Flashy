@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
@@ -26,36 +29,76 @@ class MainActivity : AppCompatActivity() {
 
                 return@setOnClickListener
             }
-
-
-            currentCardDisplayedIndex++
-
-
-            if(currentCardDisplayedIndex >= allFlashcards.size) {
-                Snackbar.make(
-                    findViewById<TextView>(R.id.flashcard_question),
-                    "You've reached the end of the cards, going back to start.",
-                    Snackbar.LENGTH_SHORT)
-                    .show()
-                currentCardDisplayedIndex = 0
-            }
-
-
-            allFlashcards = flashcardDatabase.getAllCards().toMutableList()
-            val (question, answer) = allFlashcards[currentCardDisplayedIndex]
-
             val flashcardQuestion = findViewById<TextView>(R.id.flashcard_question)
             val flashcardAnswer = findViewById<TextView>(R.id.flashcard_answer)
-            findViewById<TextView>(R.id.flashcard_question).text = question
-            findViewById<TextView>(R.id.flashcard_answer).text = answer
-            flashcardQuestion.visibility = View.VISIBLE
-            flashcardAnswer.visibility = View.INVISIBLE
+
+
+            val leftOutAnim = AnimationUtils.loadAnimation(this, R.anim.left_out)
+            val rightInAnim = AnimationUtils.loadAnimation(this, R.anim.right_in)
+            leftOutAnim.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+                    // this method is called when the animation first starts
+                    flashcardQuestion.visibility = View.VISIBLE
+                    flashcardAnswer.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    // this method is called when the animation is finished playing
+                    findViewById<View>(R.id.flashcard_question).startAnimation(rightInAnim)
+
+                    currentCardDisplayedIndex++
+
+
+                    if(currentCardDisplayedIndex >= allFlashcards.size) {
+                        Snackbar.make(
+                            findViewById<TextView>(R.id.flashcard_question),
+                            "You've reached the end of the cards, going back to start.",
+                            Snackbar.LENGTH_SHORT)
+                            .show()
+                        currentCardDisplayedIndex = 0
+                    }
+
+
+                    allFlashcards = flashcardDatabase.getAllCards().toMutableList()
+                    val (question, answer) = allFlashcards[currentCardDisplayedIndex]
+
+
+                    findViewById<TextView>(R.id.flashcard_question).text = question
+                    findViewById<TextView>(R.id.flashcard_answer).text = answer
+                    flashcardQuestion.visibility = View.VISIBLE
+                    flashcardAnswer.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {
+                    // we don't need to worry about this method
+                }
+            })
+            flashcardQuestion.startAnimation(leftOutAnim)
         }
         val flashcardQuestion = findViewById<TextView>(R.id.flashcard_question)
         val flashcardAnswer = findViewById<TextView>(R.id.flashcard_answer)
         flashcardQuestion.setOnClickListener {
+            val answerSideView = findViewById<View>(R.id.flashcard_answer)
+
+// get the center for the clipping circle
+
+// get the center for the clipping circle
+            val cx = answerSideView.width / 2
+            val cy = answerSideView.height / 2
+
+// get the final radius for the clipping circle
+
+// get the final radius for the clipping circle
+            val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
+
+// create the animator for this view (the start radius is zero)
+
+// create the animator for this view (the start radius is zero)
+            val anim = ViewAnimationUtils.createCircularReveal(answerSideView, cx, cy, 0f, finalRadius)
             flashcardQuestion.visibility = View.INVISIBLE
             flashcardAnswer.visibility = View.VISIBLE
+            anim.duration = 1000
+            anim.start()
         }
         flashcardAnswer.setOnClickListener {
             flashcardQuestion.visibility = View.VISIBLE
@@ -89,6 +132,7 @@ class MainActivity : AppCompatActivity() {
 
 
             resultLauncher.launch(intent)
+            overridePendingTransition(R.anim.right_in, R.anim.left_out)
         }
 
 
